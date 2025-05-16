@@ -37,7 +37,7 @@ class ProfileScreen extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
               Card(
-                color: const Color(0xFF4B0036),
+                color: const Color(0xFF232323),
                 shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(20)),
                 elevation: 4,
@@ -48,7 +48,7 @@ class ProfileScreen extends StatelessWidget {
                     children: [
                       CircleAvatar(
                         radius: 36,
-                        backgroundColor: const Color(0xFFB71C5A),
+                        backgroundColor: Colors.grey.shade700,
                         child: Text(
                           (data['name'] ?? user.email ?? 'U')
                               .toString()
@@ -112,12 +112,12 @@ class ProfileScreen extends StatelessWidget {
               const SizedBox(height: 24),
               ElevatedButton(
                 style: ElevatedButton.styleFrom(
-                  backgroundColor: const Color(0xFFB71C5A),
-                  foregroundColor: Colors.white,
+                  backgroundColor: Colors.grey.shade200,
+                  foregroundColor: Colors.black,
                   shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(24)),
+                      borderRadius: BorderRadius.circular(16)),
                   padding:
-                      const EdgeInsets.symmetric(vertical: 16, horizontal: 32),
+                      const EdgeInsets.symmetric(vertical: 14, horizontal: 28),
                 ),
                 onPressed: () async {
                   await FirebaseService().signOut();

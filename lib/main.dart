@@ -11,11 +11,21 @@ import 'package:easy_localization/easy_localization.dart';
 import 'bloc/theme/theme_bloc.dart';
 import 'bloc/theme/theme_event.dart';
 import 'bloc/theme/theme_state.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
+
+Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
+  await Firebase.initializeApp();
+  // Здесь можно обработать уведомление в фоне
+  print('FCM background message: \\${message.messageId}');
+}
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
   await EasyLocalization.ensureInitialized();
+
+  // Обработка уведомлений в фоне
+  FirebaseMessaging.onBackgroundMessage(_firebaseMessagingBackgroundHandler);
 
   runApp(
     EasyLocalization(
@@ -27,8 +37,39 @@ void main() async {
   );
 }
 
-class MyApp extends StatelessWidget {
+class MyApp extends StatefulWidget {
   const MyApp({super.key});
+
+  @override
+  State<MyApp> createState() => _MyAppState();
+}
+
+class _MyAppState extends State<MyApp> {
+  @override
+  void initState() {
+    super.initState();
+    // Запрос разрешения (iOS/Android 13+)
+    FirebaseMessaging.instance.requestPermission();
+
+    // Обработка уведомлений, когда приложение открыто
+    FirebaseMessaging.onMessage.listen((RemoteMessage message) {
+      print(
+          'Получено уведомление в foreground: \\${message.notification?.title}');
+      // Здесь можно показать свой SnackBar, AlertDialog и т.д.
+    });
+
+    // Обработка, когда пользователь открыл уведомление
+    FirebaseMessaging.onMessageOpenedApp.listen((RemoteMessage message) {
+      print(
+          'Пользователь открыл уведомление: \\${message.notification?.title}');
+      // Можно навигировать на нужный экран
+    });
+
+    // Получение токена (для теста)
+    FirebaseMessaging.instance.getToken().then((token) {
+      print('FCM Token: \\${token}');
+    });
+  }
 
   @override
   Widget build(BuildContext context) {

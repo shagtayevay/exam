@@ -7,6 +7,7 @@ import '../home/home_screen.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'register_screen.dart';
 import '../../utils/validators.dart';
+import 'package:flutter/gestures.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
@@ -122,29 +123,52 @@ class _LoginScreenState extends State<LoginScreen>
                                 ),
                               ),
                         const SizedBox(height: 16),
-                        TextButton(
-                          onPressed: () {
-                            Navigator.of(context).pushReplacement(
-                              PageRouteBuilder(
-                                pageBuilder:
-                                    (context, animation, secondaryAnimation) =>
-                                        const RegisterScreen(),
-                                transitionsBuilder: (context, animation,
-                                    secondaryAnimation, child) {
-                                  const begin = Offset(1.0, 0.0);
-                                  const end = Offset.zero;
-                                  const curve = Curves.ease;
-                                  final tween = Tween(begin: begin, end: end)
-                                      .chain(CurveTween(curve: curve));
-                                  final offsetAnimation =
-                                      animation.drive(tween);
-                                  return SlideTransition(
-                                      position: offsetAnimation, child: child);
-                                },
+                        Text.rich(
+                          TextSpan(
+                            text: "Don't have an account? ",
+                            style: TextStyle(
+                              color: Theme.of(context).brightness ==
+                                      Brightness.dark
+                                  ? Colors.white
+                                  : Colors.black,
+                            ),
+                            children: [
+                              TextSpan(
+                                text: "Register",
+                                style: TextStyle(
+                                  fontWeight: FontWeight.bold,
+                                  color: Theme.of(context).brightness ==
+                                          Brightness.dark
+                                      ? Colors.white
+                                      : Colors.blue,
+                                ),
+                                recognizer: TapGestureRecognizer()
+                                  ..onTap = () {
+                                    Navigator.of(context).pushReplacement(
+                                      PageRouteBuilder(
+                                        pageBuilder: (context, animation,
+                                                secondaryAnimation) =>
+                                            const RegisterScreen(),
+                                        transitionsBuilder: (context, animation,
+                                            secondaryAnimation, child) {
+                                          const begin = Offset(1.0, 0.0);
+                                          const end = Offset.zero;
+                                          const curve = Curves.ease;
+                                          final tween = Tween(
+                                                  begin: begin, end: end)
+                                              .chain(CurveTween(curve: curve));
+                                          final offsetAnimation =
+                                              animation.drive(tween);
+                                          return SlideTransition(
+                                              position: offsetAnimation,
+                                              child: child);
+                                        },
+                                      ),
+                                    );
+                                  },
                               ),
-                            );
-                          },
-                          child: Text('dont_have_account'.tr()),
+                            ],
+                          ),
                         ),
                       ],
                     ),
